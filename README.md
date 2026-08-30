@@ -1,11 +1,12 @@
-# 🏭 AI Software Factory (AI 軟體開發工廠)
+# 🏭 AI Software Factory & LLM Wiki (AI 軟體開發工廠與知識庫)
 
 [![GitHub Template](https://img.shields.io/badge/GitHub-Template_Repository-blue?logo=github)](https://github.com/wujj1114/my-ai-factory)
 [![MCP Powered](https://img.shields.io/badge/MCP-GitHub_Server-green?logo=json)](https://modelcontextprotocol.io)
-[![Architecture](https://img.shields.io/badge/Architecture-Multi--Agent_Pipeline-purple)](#-軟體工廠運作流程架構)
+[![Obsidian Ready](https://img.shields.io/badge/Obsidian-Bi--directional_Links-purple?logo=obsidian)](./目錄.md)
+[![Wiki Auditor](https://img.shields.io/badge/Audit-100%25_Passed-success)](./scripts/audit_wiki_consistency.py)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-> 基於 **Subagents 多智能體協作** 與 **Model Context Protocol (MCP)** 打造的自動化軟體工程工廠。從需求分析、架構規劃、代碼編寫、審查到測試，全流程與 GitHub 生態系無縫串接。
+> 基於 **Subagents 多智能體協作**、**Model Context Protocol (MCP)** 與 **Obsidian LLM Wiki 知識庫** 打造的自動化軟體工程工廠。從需求分析、架構規劃、Schema/API 定義、代碼編寫、審查到測試，全流程與 GitHub 生態系無縫串接。
 
 ---
 
@@ -13,10 +14,11 @@
 
 | 連結目標 | 說明 | 快捷跳轉 |
 | :--- | :--- | :--- |
+| 📚 **LLM Wiki 總目錄** | 知識庫 MOC 地圖，支援 Obsidian 雙向網狀拓樸檢索 | [📖 檢視 目錄.md](./目錄.md) |
+| 📜 **專案演進日誌** | 追蹤架構、規格與 Schema 每次異動歷史 | [📜 檢視 日誌.md](./日誌.md) |
 | 📋 **Issue 追蹤看板** | 查看所有正在進行與規劃中的需求任務 | [前往 GitHub Issues](https://github.com/wujj1114/my-ai-factory/issues) |
 | 🔀 **Pull Requests 審查** | 檢視 Developer 提交與 Reviewer 審查中的 PR | [前往 GitHub PRs](https://github.com/wujj1114/my-ai-factory/pulls) |
-| 📐 **系統架構規範庫** | 存放 Architect 產出的 Mermaid 圖與 API 規範 | [瀏覽 docs/architecture/](./docs/architecture/) |
-| 🤖 **Agent 提示詞定義** | 檢視與調整各角色 Subagent 運作指令 | [瀏覽 .agents/](./.agents/) |
+| 🤖 **Agent 規範手冊** | 全域 Agent 與知識庫最高執行準則 | [檢視 AGENTS.md](./AGENTS.md) |
 
 ---
 
@@ -33,18 +35,18 @@ flowchart TD
         
         %% Step 1
         Coordinator -->|"1. 需求拆解"| PM["📋 pm-agent<br/><b>產品經理</b>"]
-        PM -->|"建立 Issue (status:ready-for-design)"| GHIssue[("📌 GitHub Issues<br/>User Story & AC")]
+        PM -->|"建立 PRD & Issue (status:ready-for-design)"| GHIssue[("📌 GitHub Issues<br/>User Story & AC")]
         
         %% Step 2
-        GHIssue -->|"2. 系統架構設計"| Arch["📐 architect-agent<br/><b>系統架構師</b>"]
-        Arch -->|"產出設計文件 & 標記 status:ready-for-dev"| ArchDocs["📑 docs/architecture/<br/>API 規格 / Schema / Mermaid"]
+        GHIssue -->|"2. 系統分析與架構設計"| Arch["📐 architect-agent<br/><b>系統架構師</b>"]
+        Arch -->|"產出 SA/SD/Schema/API & 標記 ready-for-dev"| Wiki["📚 docs/wiki/<br/>LLM Wiki 雙向連結知識庫"]
         
         %% Step 3
-        ArchDocs -->|"3. 建立 feat/ 分支 & 編寫程式碼"| Dev["💻 developer-agent<br/><b>軟體工程師</b>"]
+        Wiki -->|"3. 建立 feat/ 分支 & 編寫程式碼"| Dev["💻 developer-agent<br/><b>軟體工程師</b>"]
         Dev -->|"Docker 沙盒實作 & 發起 PR"| GHPR[("🔀 GitHub PR<br/>Closes #Issue")]
         
         %% Step 4
-        GHPR -->|"4. 審查品質與資安"| Reviewer["🔍 reviewer-agent<br/><b>代碼審查員</b>"]
+        GHPR -->|"4. 審查品質、資安與規格一致性"| Reviewer["🔍 reviewer-agent<br/><b>代碼審查員</b>"]
         Reviewer -->|"Approve / Request Changes"| GHPR
         
         %% Step 5
@@ -58,7 +60,27 @@ flowchart TD
     style Dev fill:#f59e0b,stroke:#b45309,color:#ffffff
     style Reviewer fill:#06b6d4,stroke:#0e7490,color:#ffffff
     style Tester fill:#ec4899,stroke:#be185d,color:#ffffff
+    style Wiki fill:#6366f1,stroke:#4338ca,color:#ffffff
 ```
+
+---
+
+## 📚 LLM Wiki 知識庫體系結構
+
+本專案將軟體工程資產以 **Obsidian Vault** 規範進行雙向網狀拓樸管理：
+
+```text
+docs/wiki/
+├── 01_使用者需求與PRD/       # User Stories, AC, 需求規格書
+├── 02_系統分析SA/           # 業務流程圖 (Flowchart), 狀態機 (State Machine)
+├── 03_系統設計SD/           # 模組架構, 循序圖 (Sequence Diagram)
+├── 04_資料庫設計與Schema/   # 資料表字典 (Data Dictionary), PostgreSQL DDL
+├── 05_API規格與介接/         # RESTful/GraphQL 端點規格, Request/Response JSON
+├── 06_架構決策ADR/          # 架構決策紀錄 (ADR-001 ~ )
+└── 07_測試與驗收/           # 整合測試矩陣, QA 查核點
+```
+
+> 💡 **零死鏈保證**：執行 `python -X utf8 scripts/audit_wiki_consistency.py` 自動稽核知識庫 100% 完整度與雙向連結拓樸。
 
 ---
 
@@ -67,10 +89,10 @@ flowchart TD
 | 角色名稱 | 檔案路徑 | 核心職責與產出 | 使用工具 |
 | :--- | :--- | :--- | :--- |
 | **Coordinator** | [.agents/factory-coordinator.md](./.agents/factory-coordinator.md) | 工廠總指揮，協調整個開發流程的依序調度與狀態流轉 | `run_subagent`, `github_mcp` |
-| **PM** | [.agents/pm-agent.md](./.agents/pm-agent.md) | 解析需求，建立包含 Context、AC 的 GitHub Feature Issue | `github_mcp` |
-| **Architect** | [.agents/architect-agent.md](./.agents/architect-agent.md) | 技術選型、撰寫系統架構圖與 API 介面規格，更新 Issue 狀態 | `github_mcp` |
+| **PM** | [.agents/pm-agent.md](./.agents/pm-agent.md) | 解析需求，建立包含 Context、AC 的 GitHub Feature Issue 與 `01_PRD` | `github_mcp` |
+| **Architect** | [.agents/architect-agent.md](./.agents/architect-agent.md) | 撰寫系統架構、SA/SD、Schema 與 API 規格，維護 `docs/wiki/` | `github_mcp` |
 | **Developer** | [.agents/developer-agent.md](./.agents/developer-agent.md) | 於 Docker 沙盒內開闢 `feat/` 分支、編寫代碼與單元測試、提 PR | `openhands_sandbox_exec`, `git_tools` |
-| **Reviewer** | [.agents/reviewer-agent.md](./.agents/reviewer-agent.md) | 審查 PR 變更，把關代碼品質、架構符合度與安全性漏洞 | `github_mcp` |
+| **Reviewer** | [.agents/reviewer-agent.md](./.agents/reviewer-agent.md) | 審查 PR 變更，把關代碼品質、規格一致性 (Doc-Code Sync) 與資安 | `github_mcp` |
 | **Tester** | [.agents/tester-agent.md](./.agents/tester-agent.md) | 執行沙盒端到端 (E2E) 與 API 測試，出具測試報告或建立 Bug Issue | `openhands_sandbox_exec`, `github_mcp` |
 
 ---
@@ -127,8 +149,11 @@ cd my-new-app
      }
    }
    ```
-3. **驗證連線：**
-   確保本機具備 Node.js 環境（建議 v20+），即可透過 Stdio 自動與 GitHub MCP 服務握手。
+3. **驗證連線與執行 Wiki 稽核：**
+   ```bash
+   # 執行 Wiki 一致性與雙向連結稽核
+   python -X utf8 scripts/audit_wiki_consistency.py
+   ```
 
 ---
 
@@ -146,20 +171,26 @@ my-ai-factory/
 ├── .antigravity/                   # MCP 伺服器配置目錄
 │   ├── mcp_servers.example.json    # 設定檔範本（公開）
 │   └── mcp_servers.json            # 實際運作設定檔（已加入 .gitignore）
-├── docker/                         # Docker 沙盒環境配置
+├── raw_specs/                      # 原始客戶文件 (Word, Excel, PDF, DDL, 會議紀錄)
 ├── docs/                           # 規格文件庫
-│   └── architecture/               # 架構設計文件 (API / Mermaid / Schema)
+│   ├── architecture/               # 系統總架構圖
+│   └── wiki/                       # LLM Wiki 知識庫 (Obsidian Vault)
+│       ├── 01_使用者需求與PRD/
+│       ├── 02_系統分析SA/
+│       ├── 03_系統設計SD/
+│       ├── 04_資料庫設計與Schema/
+│       ├── 05_API規格與介接/
+│       ├── 06_架構決策ADR/
+│       └── 07_測試與驗收/
+├── scripts/                        # 自動化維護與一致性稽核腳本
+│   ├── audit_wiki_consistency.py   # Wiki 完整度與雙向連結稽核
+│   └── normalize_links.py          # Obsidian 雙向連結正規化工具
 ├── src/                            # 應用程式原始碼
 ├── tests/                          # 單元測試與 E2E 測試
+├── AGENTS.md                       # 全域多 Agent 與 Wiki 運作最高準則
+├── CLAUDE.md                       # AI 助理快速參照指引
+├── 目錄.md                         # 知識庫總目錄 (Map of Content, MOC)
+├── 日誌.md                         # 規格與開發變更日誌 (Dev Changelog)
 ├── .gitignore                      # Git 忽略清單
 └── README.md                       # 專案說明與架構導覽
 ```
-
----
-
-## 🔮 未來功能擴充路線 (Roadmap)
-
-- [ ] **GitHub Projects 自動化 Kanban 看板連動**
-- [ ] **CI/CD 自動化 Pipeline (GitHub Actions) 串接**
-- [ ] **自動化 CHANGELOG 與 Release 釋出 Agent**
-- [ ] **多語言技術棧範本支援 (Python FastAPI, Go, Next.js, Node.js)**
